@@ -1,0 +1,89 @@
+runspec v6674 started at Thu Jun  5 02:30:25 2025 on "liang-VMware-Virtual-Platform"
+runspec is: /home/liang/gem5-stable/SPEC-cpu2006-1.2/bin/runspec
+runspec: runspec --config=aarch64.cfg --size=ref --noreportable --tune=base --iterations=1 401.bzip2
+toolset: linux-suse10-amd64
+
+Locating benchmarks...found 31 benchmarks in 6 benchsets.
+Reading config file '/home/liang/gem5-stable/SPEC-cpu2006-1.2/config/aarch64.cfg'
+Running "specperl /home/liang/gem5-stable/SPEC-cpu2006-1.2/Docs/sysinfo" to gather system information.
+Read 63 total lines from the sysinfo program.
+Read 62 usable lines from the sysinfo program.
+
+Retrieving flags file (/home/liang/gem5-stable/SPEC-cpu2006-1.2/config/flags/Example-gcc4x-flags-revA.xml)...
+Retrieving flags file (/home/liang/gem5-stable/SPEC-cpu2006-1.2/config/flags/Example-linux-platform-revA.xml)...
+Verbosity = 5
+Action    = validate
+Tune      = base
+Ext       = gcc43-64bit
+Size      = ref
+Machine   = default
+benchmarks= 401.bzip2
+outputs   = asc,csv,html
+username  = liang
+Benchmarks selected: 401.bzip2
+Compiling Binaries
+
+------------------------------------------------------------------------
+  Up to date 401.bzip2 base gcc43-64bit default
+
+
+Setting Up Run Directories
+  Setting up 401.bzip2 ref base gcc43-64bit default: created (run_base_ref_gcc43-64bit.0000)
+
+-----------------------------------
+Running Benchmarks
+
+-----------------------------------
+  Running 401.bzip2 ref base gcc43-64bit default
+Commands to run:
+    -b numactl -m 0 --physcpubind=0
+    -C /home/liang/gem5-stable/SPEC-cpu2006-1.2/benchspec/CPU2006/401.bzip2/run/run_base_ref_gcc43-64bit.0000
+    -o input.source.out -e input.source.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit input.source 280 (timed)
+    -o chicken.jpg.out -e chicken.jpg.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit chicken.jpg 30 (timed)
+    -o liberty.jpg.out -e liberty.jpg.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit liberty.jpg 30 (timed)
+    -o input.program.out -e input.program.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit input.program 280 (timed)
+    -o text.html.out -e text.html.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit text.html 280 (timed)
+    -o input.combined.out -e input.combined.err ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit input.combined 200 (timed)
+Specinvoke: /home/liang/gem5-stable/SPEC-cpu2006-1.2/bin/specinvoke -d /home/liang/gem5-stable/SPEC-cpu2006-1.2/benchspec/CPU2006/401.bzip2/run/run_base_ref_gcc43-64bit.0000 -e speccmds.err -o speccmds.stdout -f speccmds.cmd -C -q
+Issuing command '/home/liang/gem5-stable/SPEC-cpu2006-1.2/bin/specinvoke -d /home/liang/gem5-stable/SPEC-cpu2006-1.2/benchspec/CPU2006/401.bzip2/run/run_base_ref_gcc43-64bit.0000 -e speccmds.err -o speccmds.stdout -f speccmds.cmd -C -q'
+/home/liang/gem5-stable/SPEC-cpu2006-1.2/bin/specinvoke -d /home/liang/gem5-stable/SPEC-cpu2006-1.2/benchspec/CPU2006/401.bzip2/run/run_base_ref_gcc43-64bit.0000 -e speccmds.err -o speccmds.stdout -f speccmds.cmd -C -q
+Start command: Thu Jun  5 02:30:27 2025 (1749061827)
+Stop command: Thu Jun  5 02:30:27 2025 (1749061827)
+Elapsed time for command: 00:00:00 (0)
+
+401.bzip2: copy 0 non-zero return code (exit code=126, signal=0)
+
+
+****************************************
+Contents of input.source.err
+****************************************
+/bin/sh: 1: ../run_base_ref_gcc43-64bit.0000/bzip2_base.gcc43-64bit: Exec format error
+
+****************************************
+Workload elapsed time (0:1) = 0.002973 seconds
+Copy 0 of 401.bzip2 (base ref) run 1 finished at Thu Jun  5 02:30:27 2025.  Total elapsed time: 0.002973
+Benchmark Times:
+  Start:    Thu Jun  5 02:30:27 2025 (1749061827)
+  Stop:     Thu Jun  5 02:30:27 2025 (1749061827)
+  Elapsed:  00:00:00 (0)
+  Reported: 0 3019000 0.003019
+ Error 401.bzip2 base ref ratio=3196422.66, runtime=0.003019, power=0.00w, temp=0.00 deg, humidity=0.00%
+Error: 1x401.bzip2
+Producing Raw Reports
+mach: default
+  ext: gcc43-64bit
+    size: ref
+      set: int
+        format: raw -> /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.rsf
+Parsing flags for 401.bzip2 base: done
+Doing flag reduction: done
+        format: flags -> /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.flags.html
+        format: ASCII -> /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.txt
+        format: CSV -> /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.csv
+        format: HTML -> /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.html, /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/invalid.gif, /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CINT2006.005.ref.gif
+      set: fp
+
+The log for this run is in /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CPU2006.005.log
+The debug log for this run is in /home/liang/gem5-stable/SPEC-cpu2006-1.2/result/CPU2006.005.log.debug
+
+runspec finished at Thu Jun  5 02:30:28 2025; 3 total seconds elapsed
