@@ -1,0 +1,1171 @@
+package dao;//Data Access Object，数据访问层。
+
+import entity.Employee;
+import java.sql.*;
+import java.util.*;
+
+public class EmployeeDAO {
+    private Connection getConn() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/企业人事档案管理?useSSL=false";
+        String user = "root";
+        String password = "@123qweQWE";
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    public boolean addEmployee(Employee emp) {
+        String sql = "INSERT INTO employee (employeeID, employeeName, phoneNum, sex, address, ethnicType, maritalStatus, politicalStatus, degreeOfEdu, major, careerID, user, pwd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, emp.getEmployeeID());
+            ps.setString(2, emp.getEmployeeName());
+            ps.setString(3, emp.getPhoneNum());
+            ps.setString(4, emp.getSex());
+            ps.setString(5, emp.getAddress());
+            ps.setString(6, emp.getEthnicType());
+            ps.setString(7, emp.getMaritalStatus());
+            ps.setString(8, emp.getPoliticalStatus());
+            ps.setString(9, emp.getDegreeOfEdu());
+            ps.setString(10, emp.getMajor());
+            ps.setString(11, emp.getCareerID());
+            ps.setString(12, emp.getUser());
+            ps.setString(13, emp.getPwd());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteEmployee(String employeeID) {
+        String sql = "DELETE FROM employee WHERE employeeID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, employeeID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateEmployee(@org.jetbrains.annotations.NotNull Employee emp) {
+        String sql = "UPDATE employee SET employeeName=?, phoneNum=?, sex=?, address=?, ethnicType=?, maritalStatus=?, politicalStatus=?, degreeOfEdu=?, major=?, careerID=?, user=?, pwd=? WHERE employeeID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, emp.getEmployeeName());
+            ps.setString(2, emp.getPhoneNum());
+            ps.setString(3, emp.getSex());
+            ps.setString(4, emp.getAddress());
+            ps.setString(5, emp.getEthnicType());
+            ps.setString(6, emp.getMaritalStatus());
+            ps.setString(7, emp.getPoliticalStatus());
+            ps.setString(8, emp.getDegreeOfEdu());
+            ps.setString(9, emp.getMajor());
+            ps.setString(10, emp.getCareerID());
+            ps.setString(11, emp.getUser());
+            ps.setString(12, emp.getPwd());
+            ps.setString(13, emp.getEmployeeID());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Employee getEmployeeById(String employeeID) {
+        String sql = "SELECT * FROM employee WHERE employeeID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, employeeID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Employee emp = new Employee();
+                emp.setEmployeeID(rs.getString("employeeID"));
+                emp.setEmployeeName(rs.getString("employeeName"));
+                emp.setPhoneNum(rs.getString("phoneNum"));
+                emp.setSex(rs.getString("sex"));
+                emp.setAddress(rs.getString("address"));
+                emp.setEthnicType(rs.getString("ethnicType"));
+                emp.setMaritalStatus(rs.getString("maritalStatus"));
+                emp.setPoliticalStatus(rs.getString("politicalStatus"));
+                emp.setDegreeOfEdu(rs.getString("degreeOfEdu"));
+                emp.setMajor(rs.getString("major"));
+                emp.setCareerID(rs.getString("careerID"));
+                emp.setUser(rs.getString("user"));
+                emp.setPwd(rs.getString("pwd"));
+                return emp;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Employee> getAllEmployees() {
+        List<Employee> list = new ArrayList<>();
+        String sql = "SELECT * FROM employee";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Employee emp = new Employee();
+                emp.setEmployeeID(rs.getString("employeeID"));
+                emp.setEmployeeName(rs.getString("employeeName"));
+                emp.setPhoneNum(rs.getString("phoneNum"));
+                emp.setSex(rs.getString("sex"));
+                emp.setAddress(rs.getString("address"));
+                emp.setEthnicType(rs.getString("ethnicType"));
+                emp.setMaritalStatus(rs.getString("maritalStatus"));
+                emp.setPoliticalStatus(rs.getString("politicalStatus"));
+                emp.setDegreeOfEdu(rs.getString("degreeOfEdu"));
+                emp.setMajor(rs.getString("major"));
+                emp.setCareerID(rs.getString("careerID"));
+                emp.setUser(rs.getString("user"));
+                emp.setPwd(rs.getString("pwd"));
+                //emp.setChangeTime(rs.getString("changeTime"));
+                //emp.setIdentity(rs.getString("identity"));
+                list.add(emp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public boolean updateEmployeeProfile(Employee emp) {
+        String sql = "UPDATE employee SET phoneNum=?, sex=?, address=?, ethnicType=?, maritalStatus=?, politicalStatus=?, degreeOfEdu=?, major=? WHERE employeeID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, emp.getPhoneNum());
+            ps.setString(2, emp.getSex());
+            ps.setString(3, emp.getAddress());
+            ps.setString(4, emp.getEthnicType());
+            ps.setString(5, emp.getMaritalStatus());
+            ps.setString(6, emp.getPoliticalStatus());
+            ps.setString(7, emp.getDegreeOfEdu());
+            ps.setString(8, emp.getMajor());
+            ps.setString(9, emp.getEmployeeID());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+
+
+package dao;
+
+import java.sql.*;
+import java.util.*;
+
+public class StatisticsDAO {
+    private Connection getConn() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/企业人事档案管理?useSSL=false";
+        String user = "root";
+        String password = "@123qweQWE";
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    // 正确实现部门员工统计
+    public Map<String, Integer> getEmployeeCountByDepartment() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = "SELECT d.departmentName, COUNT(e.employeeID) AS empCount " +
+                "FROM department d " +
+                "LEFT JOIN career c ON d.departmentID = c.departmentID " +
+                "LEFT JOIN employee e ON c.careerID = e.careerID " +
+                "GROUP BY d.departmentID, d.departmentName";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                result.put(rs.getString("departmentName"), rs.getInt("empCount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    // 按性别统计
+    public Map<String, Integer> getEmployeeCountByGender() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = "SELECT sex, COUNT(*) AS empCount FROM employee GROUP BY sex";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                result.put(rs.getString("sex"), rs.getInt("empCount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // 按学历统计
+    public Map<String, Integer> getEmployeeCountByDegree() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = "SELECT degreeOfEdu, COUNT(*) AS empCount FROM employee GROUP BY degreeOfEdu";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                result.put(rs.getString("degreeOfEdu"), rs.getInt("empCount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // 按民族统计
+    public Map<String, Integer> getEmployeeCountByEthnicType() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = "SELECT ethnicType, COUNT(*) AS empCount FROM employee GROUP BY ethnicType";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                result.put(rs.getString("ethnicType"), rs.getInt("empCount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+}
+
+
+
+package dao;
+
+import entity.User;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+public class UserDAO {
+    private Connection getConn() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/企业人事档案管理?useSSL=false";
+        String user = "root";
+        String password = "@123qweQWE";
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    public User getUserById(String userID) {
+        String sql = "SELECT * FROM user WHERE userID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                User u = new User();
+                u.setUserID(rs.getString("userID"));
+                u.setPwd(rs.getString("pwd"));
+                u.setIdentity(rs.getString("identity"));
+                return u;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 新增：修改用户信息（支持部分字段更新）
+    public boolean updateUser(User user) {
+        String sql = "UPDATE user SET pwd=?, identity=? WHERE userID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getPwd());
+            ps.setString(2, user.getIdentity());
+            ps.setString(3, user.getUserID());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateUserPwd(String userID, String newPwd) {
+        String sql = "UPDATE user SET pwd=? WHERE userID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newPwd);
+            ps.setString(2, userID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /** 管理员修改身份 */
+    public boolean updateUserIdentity(String userID, String newIdentity) {
+        String sql = "UPDATE user SET identity=? WHERE userID=?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newIdentity);
+            ps.setString(2, userID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public List<User> getAllUsers() {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user";
+        try (Connection conn = getConn(); Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                User u = new User();
+                u.setUserID(rs.getString("userID"));
+                u.setPwd(rs.getString("pwd"));
+                u.setIdentity(rs.getString("identity"));
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+}
+
+
+
+package entity;
+
+import java.util.Date;
+
+public class Attendance {//考勤
+    private int id;
+    private String employeeID;
+    private Date date;
+    private String status; // "正常", "迟到", "早退", "缺勤", etc.
+
+    // getters and setters
+}
+
+
+
+package entity;//存放“实体对象”
+
+public class Employee {
+    private String employeeID;
+    private String employeeName;
+    private String phoneNum;
+    private String sex;
+    private String address;
+    private String ethnicType;
+    private String maritalStatus;
+    private String politicalStatus;
+    private String degreeOfEdu;
+    private String major;
+    private String careerID;
+    private String user;
+    private String pwd;
+    private String identity;
+    private String changeTime;
+
+    public String getEmployeeID() { return employeeID; }
+    public void setEmployeeID(String employeeID) { this.employeeID = employeeID; }
+    public String getEmployeeName() { return employeeName; }
+    public void setEmployeeName(String employeeName) { this.employeeName = employeeName; }
+    public String getPhoneNum() { return phoneNum; }
+    public void setPhoneNum(String phoneNum) { this.phoneNum = phoneNum; }
+    public String getSex() { return sex; }
+    public void setSex(String sex) { this.sex = sex; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getEthnicType() { return ethnicType; }
+    public void setEthnicType(String ethnicType) { this.ethnicType = ethnicType; }
+    public String getMaritalStatus() { return maritalStatus; }
+    public void setMaritalStatus(String maritalStatus) { this.maritalStatus = maritalStatus; }
+    public String getPoliticalStatus() { return politicalStatus; }
+    public void setPoliticalStatus(String politicalStatus) { this.politicalStatus = politicalStatus; }
+    public String getDegreeOfEdu() { return degreeOfEdu; }
+    public void setDegreeOfEdu(String degreeOfEdu) { this.degreeOfEdu = degreeOfEdu; }
+    public String getMajor() { return major; }
+    public void setMajor(String major) { this.major = major; }
+    public String getCareerID() { return careerID; }
+    public void setCareerID(String careerID) { this.careerID = careerID; }
+    public String getUser() { return user; }
+    public void setUser(String user) { this.user = user; }
+    public String getPwd() { return pwd; }
+    public void setPwd(String pwd) { this.pwd = pwd; }
+
+    public String getIdentity() { return identity;}
+    public void setIdentity(String identity) {this.identity=identity;}
+
+    public String getChangeTime() {return changeTime;}
+    public void setChangeTime(String changeTime) {this.changeTime=changeTime;}
+
+    }
+
+
+package entity;
+
+public class User {
+    private String userID;
+    private String pwd;
+    private String identity; // 管理员/员工
+
+    public String getUserID() { return userID; }
+    public void setUserID(String userID) { this.userID = userID; }
+    public String getPwd() { return pwd; }
+    public void setPwd(String pwd) { this.pwd = pwd; }
+    public String getIdentity() { return identity; }
+    public void setIdentity(String identity) { this.identity = identity; }
+}
+
+
+
+package service;
+
+import dao.UserDAO;
+import entity.User;
+
+public class AuthService {//权限验证
+    private static User currentUser = null;
+
+    public static boolean login(String userID, String pwd) {
+        UserDAO dao = new UserDAO();
+        User user = dao.getUserById(userID);
+            if(user!=null && user.getPwd().equals(pwd)) {
+            currentUser = user;
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isAdmin() {
+        return currentUser!=null && "管理员".equals(currentUser.getIdentity());
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+}
+
+
+package ui;
+
+import dao.StatisticsDAO;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Map;
+
+public class AdvancedStatisticsUI extends JFrame {
+    private StatisticsDAO dao = new StatisticsDAO();
+    private JTable table;
+    private JComboBox<String> comboBox;
+
+    public AdvancedStatisticsUI() {
+        setTitle("多维度统计分析");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        String[] dimensions = {"部门", "性别", "学历", "民族"};
+        comboBox = new JComboBox<>(dimensions);
+
+        JButton btnStat = new JButton("统计");
+        btnStat.addActionListener(e -> showStat());
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("统计维度："));
+        topPanel.add(comboBox);
+        topPanel.add(btnStat);
+
+        table = new JTable();
+        add(topPanel, BorderLayout.NORTH);
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        showStat(); // 默认显示第一个维度
+    }
+
+    private void showStat() {
+        String dim = (String) comboBox.getSelectedItem();
+        Map<String, Integer> stat = null;
+        String colName = "";
+        switch (dim) {
+            case "部门":
+                stat = dao.getEmployeeCountByDepartment();
+                colName = "部门";
+                break;
+            case "性别":
+                stat = dao.getEmployeeCountByGender();
+                colName = "性别";
+                break;
+            case "学历":
+                stat = dao.getEmployeeCountByDegree();
+                colName = "学历";
+                break;
+            case "民族":
+                stat = dao.getEmployeeCountByEthnicType();
+                colName = "民族";
+                break;
+            // 可继续扩展
+        }
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn(colName);
+        model.addColumn("人数");
+        if (stat != null) {
+            stat.forEach((key, value) -> {
+                model.addRow(new Object[]{key, value});
+            });
+        }
+        table.setModel(model);
+    }
+}
+
+
+
+package ui;
+
+import util.CsvUtil;
+import util.DataInitializer;
+
+import javax.swing.*;
+
+public class BackupUI extends JFrame {
+    public BackupUI() {
+        setTitle("数据备份与恢复");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JButton backupBtn = new JButton("备份员工表为CSV");
+        backupBtn.addActionListener(e -> {
+            try {
+                CsvUtil.exportTableToCsv("employee", "employee_backup.csv");//导出
+                JOptionPane.showMessageDialog(this, "备份成功!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "备份失败: " + ex.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JButton restoreBtn = new JButton("恢复员工表数据");
+        restoreBtn.addActionListener(e -> {
+            try {
+                CsvUtil.importCsvToTable("employee_backup.csv", "employee");//恢复
+                JOptionPane.showMessageDialog(this, "恢复成功!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "恢复失败: " + ex.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JButton initBtn = new JButton("初始化演示数据");
+        initBtn.addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(this, "数据初始化会覆盖部分已有数据，确定继续？", "确认", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                try {
+                    DataInitializer.main(null);
+                    JOptionPane.showMessageDialog(this, "初始化完成!");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "初始化失败: " + ex.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JPanel p = new JPanel();
+        p.add(backupBtn);
+        p.add(restoreBtn);
+        p.add(initBtn);
+        add(p);
+    }
+}
+
+
+package ui;
+
+import dao.EmployeeDAO;
+import dao.UserDAO;
+import entity.Employee;
+import entity.User;
+import service.AuthService;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class EmployeeProfileUI extends JFrame {
+    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    private UserDAO userDAO = new UserDAO();
+    private Employee employee;
+    private User user;
+
+    public EmployeeProfileUI() {
+        setTitle("个人信息管理");
+        setSize(400, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        user = AuthService.getCurrentUser();
+        employee = getEmployeeByUser(user.getUserID());
+        if (employee == null) {
+            JOptionPane.showMessageDialog(this, "未找到个人员工信息！");
+            dispose();
+            return;
+        }
+
+        JTextField employeeIDField = new JTextField(employee.getEmployeeID());
+        employeeIDField.setEditable(false);
+        JTextField nameField = new JTextField(employee.getEmployeeName());
+        nameField.setEditable(false);
+        JTextField phoneField = new JTextField(employee.getPhoneNum());
+        JTextField sexField = new JTextField(employee.getSex());
+        JTextField addressField = new JTextField(employee.getAddress());
+        JTextField ethnicTypeField = new JTextField(employee.getEthnicType());
+        JTextField maritalStatusField = new JTextField(employee.getMaritalStatus());
+        JTextField politicalStatusField = new JTextField(employee.getPoliticalStatus());
+        JTextField degreeOfEduField = new JTextField(employee.getDegreeOfEdu());
+        JTextField majorField = new JTextField(employee.getMajor());
+        JTextField pwdField = new JPasswordField(user.getPwd());
+        pwdField.setEditable(true);
+        JTextField userIDField = new JTextField(user.getUserID());
+        userIDField.setEditable(false);
+        JTextField identityField = new JTextField(user.getIdentity());
+        identityField.setEditable(false);
+
+        JPanel panel = new JPanel(new GridLayout(0,2,5,5));
+        panel.add(new JLabel("员工编号:")); panel.add(employeeIDField);
+        panel.add(new JLabel("姓名:")); panel.add(nameField);
+        panel.add(new JLabel("电话:")); panel.add(phoneField);
+        panel.add(new JLabel("性别:")); panel.add(sexField);
+        panel.add(new JLabel("住址:")); panel.add(addressField);
+        panel.add(new JLabel("民族:")); panel.add(ethnicTypeField);
+        panel.add(new JLabel("婚姻状况:")); panel.add(maritalStatusField);
+        panel.add(new JLabel("政治面貌:")); panel.add(politicalStatusField);
+        panel.add(new JLabel("学历:")); panel.add(degreeOfEduField);
+        panel.add(new JLabel("专业:")); panel.add(majorField);
+        panel.add(new JLabel("账号:")); panel.add(userIDField);
+        panel.add(new JLabel("身份:")); panel.add(identityField);
+        panel.add(new JLabel("密码:")); panel.add(pwdField);
+
+        JButton updateBtn = new JButton("保存修改");
+        updateBtn.addActionListener(e -> {
+            // 仅允许修改以下字段
+            employee.setPhoneNum(phoneField.getText());
+            employee.setSex(sexField.getText());
+            employee.setAddress(addressField.getText());
+            employee.setEthnicType(ethnicTypeField.getText());
+            employee.setMaritalStatus(maritalStatusField.getText());
+            employee.setPoliticalStatus(politicalStatusField.getText());
+            employee.setDegreeOfEdu(degreeOfEduField.getText());
+            employee.setMajor(majorField.getText());
+            boolean empOK = employeeDAO.updateEmployeeProfile(employee);
+
+            String newPwd = pwdField.getText();
+            boolean pwdOK = true;
+            if (!newPwd.equals(user.getPwd()) && !newPwd.isEmpty()) {
+                pwdOK = userDAO.updateUserPwd(user.getUserID(), newPwd);
+            }
+            if (empOK && pwdOK) {
+                JOptionPane.showMessageDialog(this, "修改成功！");
+                AuthService.login(user.getUserID(), newPwd.isEmpty() ? user.getPwd() : newPwd);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "修改失败！");
+            }
+        });
+
+        add(panel, BorderLayout.CENTER);
+        add(updateBtn, BorderLayout.SOUTH);
+    }
+
+    /** 通过user账号查找employee信息 */
+    private Employee getEmployeeByUser(String user) {
+        for (Employee emp : employeeDAO.getAllEmployees()) {
+            if (emp.getUser() != null && emp.getUser().equals(user)) {
+                return emp;
+            }
+        }
+        return null;
+    }
+}
+
+
+
+package ui;
+
+import dao.EmployeeDAO;
+import entity.Employee;
+import service.AuthService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class EmployeeUI extends JFrame {
+    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    private JTable table;
+    private JScrollPane scrollPane;
+
+    public EmployeeUI() {
+        setTitle("员工信息管理");
+        setSize(800,600);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        if (!service.AuthService.isAdmin()) {
+            JOptionPane.showMessageDialog(this, "非管理员账号，无权限访问该模块！");
+            dispose();
+            return;
+        }
+        JButton btnList = new JButton("显示所有员工");
+        btnList.addActionListener(e -> showAllEmployees());
+
+        JButton btnAdd = new JButton("增加员工");
+        btnAdd.addActionListener(e -> addEmployee());
+
+        JButton btnDelete = new JButton("删除员工");
+        btnDelete.addActionListener(e -> deleteEmployee());
+
+        JPanel panel = new JPanel();
+        panel.add(btnList);
+        panel.add(btnAdd);
+        panel.add(btnDelete);
+
+        add(panel, BorderLayout.NORTH);
+
+        table = new JTable();
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void showAllEmployees() {
+        List<Employee> list = employeeDAO.getAllEmployees();
+        //System.out.println("员工数: " + list.size()); // 调试用
+
+        String[] col = {"员工编号", "姓名", "电话", "性别", "住址", "民族", "婚姻状况", "政治面貌", "学历", "专业", "职位编号"};// "账号", "密码"
+        String[][] data = new String[list.size()][col.length];
+        for (int i = 0; i < list.size(); i++) {
+            Employee e = list.get(i);
+            data[i][0] = e.getEmployeeID();
+            data[i][1] = e.getEmployeeName();
+            data[i][2] = e.getPhoneNum();
+            data[i][3] = e.getSex();
+            data[i][4] = e.getAddress();
+            data[i][5] = e.getEthnicType();
+            data[i][6] = e.getMaritalStatus();
+            data[i][7] = e.getPoliticalStatus();
+            data[i][8] = e.getDegreeOfEdu();
+            data[i][9] = e.getMajor();
+            data[i][10] = e.getCareerID();
+            //data[i][11] = e.getUser();
+           // data[i][12] = e.getPwd();
+        }
+        table.setModel(new javax.swing.table.DefaultTableModel(data, col));
+        table.revalidate();
+        table.repaint();
+    }
+
+    /*** 新增员工方法补全 ***/
+    private void addEmployee() {
+        JTextField[] fields = new JTextField[15];
+        String[] labels = {"员工编号", "姓名", "电话", "性别", "住址", "民族", "婚姻状况", "政治面貌", "学历", "专业", "职位编号", "账号", "密码","identity","changeTime"};
+        JPanel panel = new JPanel(new GridLayout(0,2));
+        for (int i = 0; i <=14; i++) {
+            fields[i] = new JTextField();
+            panel.add(new JLabel(labels[i]));
+            panel.add(fields[i]);
+        }
+        int result = JOptionPane.showConfirmDialog(this, panel, "添加员工", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            Employee emp = new Employee();
+            emp.setEmployeeID(fields[0].getText());
+            emp.setEmployeeName(fields[1].getText());
+            emp.setPhoneNum(fields[2].getText());
+            emp.setSex(fields[3].getText());
+            emp.setAddress(fields[4].getText());
+            emp.setEthnicType(fields[5].getText());
+            emp.setMaritalStatus(fields[6].getText());
+            emp.setPoliticalStatus(fields[7].getText());
+            emp.setDegreeOfEdu(fields[8].getText());
+            emp.setMajor(fields[9].getText());
+            emp.setCareerID(fields[10].getText());
+            emp.setUser(fields[11].getText());
+            emp.setPwd(fields[12].getText());
+          //  emp.setIdentity(fields[13].getText());
+           // emp.setChangeTime(fields[14].getText());
+            if (employeeDAO.addEmployee(emp)) {
+                JOptionPane.showMessageDialog(this, "添加成功！");
+                showAllEmployees();
+            } else {
+                JOptionPane.showMessageDialog(this, "添加失败！");
+            }
+        }
+    }
+
+    private void deleteEmployee() {
+        if (!AuthService.isAdmin()) {
+            JOptionPane.showMessageDialog(this, "权限不够！");
+            return;
+        }
+        String id = JOptionPane.showInputDialog(this, "输入要删除的员工编号:");
+        if (id != null && !id.trim().isEmpty()) {
+            if (employeeDAO.deleteEmployee(id.trim())) {
+                JOptionPane.showMessageDialog(this, "删除成功！");
+                showAllEmployees();
+            } else {
+                JOptionPane.showMessageDialog(this, "删除失败！");
+            }
+        }
+    }
+}
+
+
+
+
+package ui;
+
+import service.AuthService;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class LoginUI extends JFrame {
+    public LoginUI() {
+        setTitle("系统登录");
+        setSize(245, 130);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2, 1, 1));
+        JTextField userField = new JTextField(10);
+        JPasswordField pwdField = new JPasswordField(10);
+        panel.add(new JLabel("账号"));
+        panel.add(userField);
+        panel.add(new JLabel("密码"));
+        panel.add(pwdField);
+
+        JButton btn = new JButton("登录");
+        btn.addActionListener(e -> {
+            String id = userField.getText();
+            String pwd = new String(pwdField.getPassword());
+            if (AuthService.login(id, pwd)) {
+                JOptionPane.showMessageDialog(this, "登录成功!");
+                dispose();
+                if (AuthService.isAdmin()) {
+                    new MainUI().setVisible(true);   // 管理员进入主界面
+                } else {
+                    new EmployeeProfileUI().setVisible(true); // 员工仅进入个人信息界面
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "账号或密码错误!");
+            }
+        });
+        getRootPane().setDefaultButton(btn);
+        add(panel, "Center");
+        add(btn, "South");
+    }
+
+    public static void main(String[] args) {
+        new LoginUI().setVisible(true);
+    }
+}
+package ui;
+
+import service.AuthService;
+
+import javax.swing.*;
+
+public class MainUI extends JFrame {
+    public MainUI() {
+        setTitle("企业人事档案管理系统");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("功能");
+
+        // 员工管理菜单项：仅管理员可用
+        JMenuItem employeeItem = new JMenuItem("员工管理");
+        employeeItem.addActionListener(e -> new EmployeeUI().setVisible(true));
+        if (!AuthService.isAdmin()) {
+            employeeItem.setEnabled(false); // 非管理员禁用
+        }
+
+          // 数据维护菜单项：管理员和员工都可用
+        JMenuItem backupItem = new JMenuItem("数据维护");
+        backupItem.addActionListener(e -> new BackupUI().setVisible(true));
+
+        // 账号管理：所有用户可用（根据UserEditUI权限区分）
+        JMenuItem userEditItem = new JMenuItem("账号管理");
+        userEditItem.addActionListener(e -> new UserEditUI().setVisible(true));
+
+        // 个人信息修改：所有用户可用
+        JMenuItem profileItem = new JMenuItem("个人信息修改");
+        profileItem.addActionListener(e -> new EmployeeProfileUI().setVisible(true));
+        JMenuItem advancedStatItem = new JMenuItem("多维度统计分析");
+        advancedStatItem.addActionListener(e -> new AdvancedStatisticsUI().setVisible(true));
+        menu.add(advancedStatItem);
+        menu.add(employeeItem);
+        menu.add(backupItem);
+        menu.add(userEditItem);
+        menu.add(profileItem);
+
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
+
+        JLabel welcome = new JLabel("欢迎使用企业人事档案管理系统", SwingConstants.CENTER);
+        add(welcome);
+    }
+}
+
+
+
+package ui;
+
+import dao.UserDAO;
+import entity.User;
+import service.AuthService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
+
+public class UserEditUI extends JFrame {
+    private UserDAO userDAO = new UserDAO();
+
+    public UserEditUI() {
+        setTitle("账号管理");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        User currentUser = AuthService.getCurrentUser();
+
+        if (AuthService.isAdmin()) {
+            // 管理员模式：可以选择用户，修改密码和身份
+            List<User> allUsers = getAllUsers();
+            String[] userIDs = allUsers.stream().map(User::getUserID).toArray(String[]::new);
+            JComboBox<String> userCombo = new JComboBox<>(userIDs);
+
+            JTextField userIDField = new JTextField();
+            userIDField.setEditable(false);
+            JPasswordField pwdField = new JPasswordField();
+            JTextField identityField = new JTextField();
+            JPanel panel = new JPanel(new GridLayout(0,2,5,5));
+            panel.add(new JLabel("选择账号:"));
+            panel.add(userCombo);
+            panel.add(new JLabel("账号:"));
+            panel.add(userIDField);
+            panel.add(new JLabel("密码:"));
+            panel.add(pwdField);
+            panel.add(new JLabel("身份:"));
+            panel.add(identityField);
+
+            userCombo.addActionListener(e -> {
+                String uid = (String) userCombo.getSelectedItem();
+                User u = userDAO.getUserById(uid);
+                userIDField.setText(u.getUserID());
+                pwdField.setText(u.getPwd());
+                identityField.setText(u.getIdentity());
+            });
+            if (userIDs.length > 0) userCombo.setSelectedIndex(0);
+
+            JButton btnSave = new JButton("保存修改");
+            btnSave.addActionListener(e -> {
+                String userID = userIDField.getText();
+                String newPwd = new String(pwdField.getPassword());
+                String newIdentity = identityField.getText();
+                boolean pwdOK = userDAO.updateUserPwd(userID, newPwd);
+                boolean idOK = userDAO.updateUserIdentity(userID, newIdentity);
+                if (pwdOK && idOK) {
+                    JOptionPane.showMessageDialog(this, "修改成功！");
+                    if (userID.equals(currentUser.getUserID()))
+                        AuthService.login(userID, newPwd);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "修改失败！");
+                }
+            });
+            add(panel, BorderLayout.CENTER);
+            add(btnSave, BorderLayout.SOUTH);
+        } else {
+            // 普通员工模式：只能改自己密码
+            JTextField userIDField = new JTextField(currentUser.getUserID());
+            userIDField.setEditable(false);
+            JPasswordField pwdField = new JPasswordField(currentUser.getPwd());
+            JTextField identityField = new JTextField(currentUser.getIdentity());
+            identityField.setEditable(false);
+
+            JPanel panel = new JPanel(new GridLayout(0,2,5,5));
+            panel.add(new JLabel("账号:"));
+            panel.add(userIDField);
+            panel.add(new JLabel("密码:"));
+            panel.add(pwdField);
+            panel.add(new JLabel("身份:"));
+            panel.add(identityField);
+
+            JButton btnSave = new JButton("保存密码");
+            btnSave.addActionListener(e -> {
+                String newPwd = new String(pwdField.getPassword());
+                if (newPwd.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "密码不能为空！");
+                    return;
+                }
+                boolean ok = userDAO.updateUserPwd(currentUser.getUserID(), newPwd);
+                if (ok) {
+                    JOptionPane.showMessageDialog(this, "修改成功！");
+                    AuthService.login(currentUser.getUserID(), newPwd);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "修改失败！");
+                }
+            });
+            add(panel, BorderLayout.CENTER);
+            add(btnSave, BorderLayout.SOUTH);
+        }
+    }
+
+    /** 获取所有用户（管理员用） */
+    private List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+}
+
+
+
+package util;
+
+import java.io.*;
+import java.sql.*;
+
+public class CsvUtil {
+    public static void exportTableToCsv(String tableName, String filePath) throws Exception {//将指定数据库表的数据导出为CSV文件
+        String url = "jdbc:mysql://localhost:3306/企业人事档案管理?useSSL=false";
+        String user = "root";
+        String password = "@123qweQWE";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM " + tableName);
+             PrintWriter pw = new PrintWriter(filePath)) {
+            ResultSetMetaData md = rs.getMetaData();
+            int colCount = md.getColumnCount();
+            // print header
+            for(int i=1;i<=colCount;i++) {
+                pw.print(md.getColumnName(i));
+                if(i!=colCount) pw.print(",");
+            }
+            pw.println();
+            // print data
+            while(rs.next()) {
+                for(int i=1;i<=colCount;i++) {
+                    pw.print(rs.getString(i));
+                    if(i!=colCount) pw.print(",");
+                }
+                pw.println();
+            }
+        }
+    }
+
+    public static void importCsvToTable(String filePath, String tableName) throws Exception {//从指定CSV文件读取数据，并插入到数据库的指定表
+        String url = "jdbc:mysql://localhost:3306/企业人事档案管理?useSSL=false";
+        String user = "root";
+        String password = "@123qweQWE";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String header = br.readLine();
+            String[] columns = header.split(",");
+            String sql = "INSERT INTO " + tableName + " (" + header + ") VALUES (" +
+                    "?,".repeat(columns.length-1) + "?)";
+            String line;
+            while((line=br.readLine())!=null) {
+                String[] vals = line.split(",");
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    for(int i=0;i<vals.length;i++) ps.setString(i+1, vals[i]);
+                    ps.executeUpdate();
+                }
+            }
+        }
+    }
+}
+
+
+package util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * 数据库数据初始化工具。
+ * 支持部门、职位、员工数据的批量初始化，自动处理主键冲突。
+ */
+public class DataInitializer {
+    // 修改为你的实际数据库连接信息
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/企业人事档案管理?useUnicode=true&characterEncoding=UTF-8&useSSL=false";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "@123qweQWE";
+
+    public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            // 关闭外键约束，防止清空表时报错
+            setForeignKeyChecks(conn, false);
+
+            // 清空表数据（先子表后父表）
+            clearTable(conn, "employee");
+            clearTable(conn, "career");
+            clearTable(conn, "department");
+
+            // 恢复外键约束
+            setForeignKeyChecks(conn, true);
+
+            // 初始化数据（父表先插）
+            initDepartment(conn);
+            initCareer(conn);
+            initEmployee(conn);
+
+            System.out.println("数据初始化完成！");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("数据初始化失败: " + e.getMessage());
+        }
+    }
+
+    /** 设置外键约束开关 */
+    private static void setForeignKeyChecks(Connection conn, boolean enable) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("SET FOREIGN_KEY_CHECKS = " + (enable ? "1" : "0"));
+        }
+    }
+
+    /** 清空指定表 */
+    private static void clearTable(Connection conn, String tableName) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("TRUNCATE TABLE " + tableName);
+        }
+    }
+
+    /** 初始化部门表 */
+    public static void initDepartment(Connection conn) throws SQLException {
+        String insertDept = "INSERT INTO department (departmentID, departmentName) VALUES (?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(insertDept)) {
+            ps.setInt(1, 1); ps.setString(2, "人事部"); ps.executeUpdate();
+            ps.setInt(1, 2); ps.setString(2, "技术部"); ps.executeUpdate();
+            ps.setInt(1, 3); ps.setString(2, "财务部"); ps.executeUpdate();
+        }
+    }
+
+    /** 初始化职位表 */
+    public static void initCareer(Connection conn) throws SQLException {
+        String insertCareer = "INSERT INTO career (careerID, careerName, departmentID) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(insertCareer)) {
+            ps.setInt(1, 1); ps.setString(2, "人事专员"); ps.setInt(3, 1); ps.executeUpdate();
+            ps.setInt(1, 2); ps.setString(2, "Java工程师"); ps.setInt(3, 2); ps.executeUpdate();
+            ps.setInt(1, 3); ps.setString(2, "会计"); ps.setInt(3, 3); ps.executeUpdate();
+        }
+    }
+
+    /** 初始化员工表 */
+    public static void initEmployee(Connection conn) throws SQLException {
+        String insertEmp = "INSERT INTO employee (employeeID, name, phoneNum, sex, birthday, careerID, address, email, idNumber, entryDate, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(insertEmp)) {
+            ps.setString(1, "E001"); ps.setString(2, "张三"); ps.setString(3, "13800138000"); ps.setString(4, "男");
+            ps.setString(5, "1990-01-01"); ps.setInt(6, 1); ps.setString(7, "北京"); ps.setString(8, "zhangsan@email.com");
+            ps.setString(9, "110101199001010011"); ps.setString(10, "2020-01-10"); ps.setString(11, "无"); ps.executeUpdate();
+
+            ps.setString(1, "E002"); ps.setString(2, "李四"); ps.setString(3, "13900139000"); ps.setString(4, "女");
+            ps.setString(5, "1992-02-02"); ps.setInt(6, 2); ps.setString(7, "上海"); ps.setString(8, "lisi@email.com");
+            ps.setString(9, "310101199202020022"); ps.setString(10, "2021-03-15"); ps.setString(11, "无"); ps.executeUpdate();
+
+            ps.setString(1, "E003"); ps.setString(2, "王五"); ps.setString(3, "13700137000"); ps.setString(4, "男");
+            ps.setString(5, "1988-05-05"); ps.setInt(6, 3); ps.setString(7, "广州"); ps.setString(8, "wangwu@email.com");
+            ps.setString(9, "440101198805050033"); ps.setString(10, "2019-07-20"); ps.setString(11, "无"); ps.executeUpdate();
+        }
+    }
+}
